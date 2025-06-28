@@ -31,34 +31,40 @@
     <option value="de">Deutsch</option>
     <option value="ar">العربية</option>
   </select>
+
   <script>
+    // Read ?lang=fr etc. from the URL
     function getLanguageFromURL() {
       const params = new URLSearchParams(window.location.search);
       return params.get('lang');
     }
-  <script>
-  <script>
+
+    // Set text direction for Arabic (rtl)
     function updateDirection(lang) {
       const rtlLangs = ['ar'];
       document.documentElement.dir = rtlLangs.includes(lang) ? 'rtl' : 'ltr';
     }
 
+    // Initialize i18next
     i18next
       .use(i18nextHttpBackend)
       .use(i18nextBrowserLanguageDetector)
       .init({
-        lng: getLanguageFromURL(), // 👈 use URL language if present
+        lng: getLanguageFromURL(), // use lang=xx from URL if present
         fallbackLng: 'en',
         debug: false,
         backend: {
           loadPath: './locales/{{lng}}.json'
         }
       }, function () {
-        updateDirection(i18next.language);
+        const lang = i18next.language;
+        updateDirection(lang);
         document.getElementById('title').innerText = i18next.t('title');
         document.getElementById('content').innerHTML = i18next.t('content');
+        document.getElementById('languageSwitcher').value = lang;
       });
 
+    // Handle language change from dropdown
     document.getElementById('languageSwitcher').addEventListener('change', function () {
       const lang = this.value;
       i18next.changeLanguage(lang, () => {
