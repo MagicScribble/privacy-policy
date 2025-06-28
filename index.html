@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Privacy Policy</title>
+  <script src="https://unpkg.com/i18next@21.6.14/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-http-backend@1.4.1/i18nextHttpBackend.min.js"></script>
+  <script src="https://unpkg.com/i18next-browser-languagedetector@6.1.4/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://unpkg.com/jquery-i18next@1.2.1/jquery-i18next.min.js"></script>
+</head>
+<body>
+  <select id="languageSwitcher">
+    <option value="en">English</option>
+    <option value="fr">Français</option>
+    <option value="ja">日本語</option>
+    <option value="de">Deutsch</option>
+  </select>
+
+  <h1 data-i18n="title">Privacy Policy</h1>
+  <p data-i18n="content">This is your privacy policy text.</p>
+
+  <script>
+    i18next
+      .use(i18nextHttpBackend)
+      .use(i18nextBrowserLanguageDetector)
+      .init({
+        fallbackLng: 'en',
+        debug: true,
+        backend: {
+          loadPath: './locales/{{lng}}.json'
+        }
+      }, function(err, t) {
+        jqueryI18next.init(i18next, $, { useOptionsAttr: true });
+        $('body').localize();
+      });
+
+    $('#languageSwitcher').on('change', function() {
+      const selectedLng = $(this).val();
+      i18next.changeLanguage(selectedLng, () => {
+        $('body').localize();
+      });
+    });
+  </script>
+</body>
+</html>
