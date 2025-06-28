@@ -44,20 +44,20 @@
     }
 
     i18next
-  .use(i18nextHttpBackend)
-  .use(i18nextBrowserLanguageDetector)
-  .init({
-    lng: getLanguageFromURL(), // 👈 use URL language if present
-    fallbackLng: 'en',
-    debug: false,
-    backend: {
-      loadPath: './locales/{{lng}}.json'
-    }
-  }, function () {
-    updateDirection(i18next.language);
-    document.getElementById('title').innerText = i18next.t('title');
-    document.getElementById('content').innerHTML = i18next.t('content');
-  });
+      .use(i18nextHttpBackend)
+      .use(i18nextBrowserLanguageDetector)
+      .init({
+        lng: getLanguageFromURL(), // 👈 use URL language if present
+        fallbackLng: 'en',
+        debug: false,
+        backend: {
+          loadPath: './locales/{{lng}}.json'
+        }
+      }, function () {
+        updateDirection(i18next.language);
+        document.getElementById('title').innerText = i18next.t('title');
+        document.getElementById('content').innerHTML = i18next.t('content');
+      });
 
     document.getElementById('languageSwitcher').addEventListener('change', function () {
       const lang = this.value;
