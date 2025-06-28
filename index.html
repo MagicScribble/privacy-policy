@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <title>Privacy Policy</title>
   <script src="https://unpkg.com/i18next@21.6.14/i18next.min.js"></script>
   <script src="https://unpkg.com/i18next-http-backend@1.4.1/i18nextHttpBackend.min.js"></script>
   <script src="https://unpkg.com/i18next-browser-languagedetector@6.1.4/i18nextBrowserLanguageDetector.min.js"></script>
+  <style>
+    body {
+      max-width: 700px;
+      margin: auto;
+      font-family: sans-serif;
+      padding: 2em;
+      line-height: 1.6;
+    }
+    select {
+      margin-top: 1em;
+    }
+  </style>
 </head>
 <body>
   <h1 id="title">Loading...</h1>
@@ -21,23 +33,30 @@
   </select>
 
   <script>
+    function updateDirection(lang) {
+      const rtlLangs = ['ar'];
+      document.documentElement.dir = rtlLangs.includes(lang) ? 'rtl' : 'ltr';
+    }
+
     i18next
       .use(i18nextHttpBackend)
       .use(i18nextBrowserLanguageDetector)
       .init({
         fallbackLng: 'en',
-        debug: true,
+        debug: false,
         backend: {
           loadPath: './locales/{{lng}}.json'
         }
-      }, function(err, t) {
-        document.getElementById('title').innerText = t('title');
-        document.getElementById('content').innerHTML = t('content');
+      }, function () {
+        updateDirection(i18next.language);
+        document.getElementById('title').innerText = i18next.t('title');
+        document.getElementById('content').innerHTML = i18next.t('content');
       });
 
     document.getElementById('languageSwitcher').addEventListener('change', function () {
       const lang = this.value;
       i18next.changeLanguage(lang, () => {
+        updateDirection(lang);
         document.getElementById('title').innerText = i18next.t('title');
         document.getElementById('content').innerHTML = i18next.t('content');
       });
