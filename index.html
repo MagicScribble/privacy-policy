@@ -6,20 +6,19 @@
   <script src="https://unpkg.com/i18next@21.6.14/i18next.min.js"></script>
   <script src="https://unpkg.com/i18next-http-backend@1.4.1/i18nextHttpBackend.min.js"></script>
   <script src="https://unpkg.com/i18next-browser-languagedetector@6.1.4/i18nextBrowserLanguageDetector.min.js"></script>
-  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
-  <script src="https://unpkg.com/jquery-i18next@1.2.1/jquery-i18next.min.js"></script>
 </head>
 <body>
+  <h1 id="title">Loading...</h1>
+  <div id="content">Loading...</div>
+
+  <label for="languageSwitcher">🌐 Language:</label>
   <select id="languageSwitcher">
     <option value="en">English</option>
     <option value="fr">Français</option>
     <option value="ja">日本語</option>
     <option value="de">Deutsch</option>
-    <option value="ar">Arabic</option>
+    <option value="ar">العربية</option>
   </select>
-
-  <h1 data-i18n="title">Privacy Policy</h1>
-  <p data-i18n="content">This is your privacy policy text.</p>
 
   <script>
     i18next
@@ -32,14 +31,15 @@
           loadPath: './locales/{{lng}}.json'
         }
       }, function(err, t) {
-        jqueryI18next.init(i18next, $, { useOptionsAttr: true });
-        $('body').localize();
+        document.getElementById('title').innerText = t('title');
+        document.getElementById('content').innerHTML = t('content');
       });
 
-    $('#languageSwitcher').on('change', function() {
-      const selectedLng = $(this).val();
-      i18next.changeLanguage(selectedLng, () => {
-        $('body').localize();
+    document.getElementById('languageSwitcher').addEventListener('change', function () {
+      const lang = this.value;
+      i18next.changeLanguage(lang, () => {
+        document.getElementById('title').innerText = i18next.t('title');
+        document.getElementById('content').innerHTML = i18next.t('content');
       });
     });
   </script>
